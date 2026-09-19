@@ -1,0 +1,29 @@
+[Unit]
+Description=Bonsai Qwen 27B (PTQ1_0 + turbo3_tcq + OrcaRouter LoRA)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/leviathan/buun-llama-cpp/build/bin
+Environment=PATH=/usr/local/cuda-12.8/bin:/usr/local/bin:/usr/bin:/bin
+Environment=LD_LIBRARY_PATH=/home/leviathan/buun-llama-cpp/build/bin
+Environment=CUDA_HOME=/usr/local/cuda-12.8
+ExecStart=/home/leviathan/buun-llama-cpp/build/bin/llama-server \
+  -m /home/leviathan/models/bonsai/Ternary-Bonsai-2-27B-PTQ1_0.gguf \
+  --lora-scaled /home/leviathan/models/bonsai/bonsai-abliterate-lora.gguf:1.0 \
+  -a bonsai-qwen \
+  -c 262144 -np 1 \
+  -ctk turbo3_tcq -ctv turbo3_tcq \
+  -ngl 99 -fa on --kv-unified --no-mmproj \
+  --host 0.0.0.0 --port 18081 \
+  --jinja \
+  --reasoning on --reasoning-effort xhigh \
+  --temp 1.0 --top-p 0.95 --top-k 20
+Restart=always
+RestartSec=10
+SyslogIdentifier=llama-bonsai-qwen
+LimitNOFILE=65536
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target

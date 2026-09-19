@@ -1,0 +1,13 @@
+models-link
+runtime-link
+*.gguf
+*.so
+*.so.*
+build/
+node_modules/
+.venv/
+*.db-shm
+*.db-wal
+*.sqlite*
+Checkpoints/
+Ship_Packages/
